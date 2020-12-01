@@ -1,4 +1,5 @@
 ﻿using System;
+using ver1;
 
 namespace Zadanie2
 {
@@ -6,7 +7,13 @@ namespace Zadanie2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var device = new MultiFunctionalDevice("123456789");
+            device.PowerOn();
+
+            device.Send(new PDFDocument("abc.pdf"), "987654321");
+            device.ScanAndSend("987654321");
+
+            device.PowerOff();
         }
     }
 }

@@ -6,7 +6,18 @@ namespace Zadanie3
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var printer = new Printer();
+            var scanner = new Scanner();
+
+            var copier = new Copier(printer, scanner);
+            copier.PowerOn();
+
+            var document = new PDFDocument("abc.pdf");
+
+            copier.Print(document);
+            copier.ScanAndPrint(out IDocument doc, IDocument.FormatType.PDF);
+
+            copier.PowerOff();
         }
     }
 }

@@ -46,6 +46,11 @@ namespace Zadanie3
         void Print(in IDocument document);
     }
 
+    public interface IFax : IDevice
+    {
+        void Send(IDocument document, string faxAddress);
+    }
+
     public interface IScanner : IDevice
     {
         // dokument jest skanowany, jeśli urządzenie włączone
@@ -94,6 +99,24 @@ namespace Zadanie3
             if (state == IDevice.State.on)
             {
                 Console.WriteLine($"{DateTime.Today} Scan: {document.GetFileName()}");
+            }
+        }
+    }
+
+    public class Fax : BaseDevice, IFax
+    {
+        public Fax(string faxNumber)
+        {
+            FaxNumber = faxNumber;
+        }
+
+        public string FaxNumber { get; }
+
+        public void Send(IDocument document, string faxAddress)
+        {
+            if (state == IDevice.State.on)
+            {
+                Console.WriteLine($"{DateTime.Today} Sent: {document.GetFileName()} from: {this.FaxNumber} to: {faxAddress}");
             }
         }
     }

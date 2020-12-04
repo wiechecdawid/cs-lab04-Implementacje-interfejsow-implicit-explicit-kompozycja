@@ -6,8 +6,8 @@ namespace Zadanie3
 {
     public class Copier : BaseDevice
     {
-        private IPrinter _printer;
-        private IScanner _scanner;
+        protected IPrinter _printer;
+        protected IScanner _scanner;
 
         public Copier(IPrinter printer, IScanner scanner)
         {
@@ -16,7 +16,7 @@ namespace Zadanie3
         }
 
         public int PrintCounter { get; private set; }
-        public int ScanCounter { get; private set; }
+        public int ScanCounter { get; protected set; }
 
         public void PrinterOn()
         {

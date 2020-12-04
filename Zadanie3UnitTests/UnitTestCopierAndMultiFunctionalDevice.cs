@@ -309,4 +309,89 @@ namespace Zadanie3UnitTests
         }
 
     }
+
+    [TestClass]
+    public class UnitTestMultiFunctionalDevice
+    {
+        [TestMethod]
+        public void Device_Scan_DeviceisOn()
+        {
+            var p = new Printer();
+            var s = new Scanner();
+            var f = new Fax("123456789");
+            var device = new MultiFunctionalDevice(p,s,f);
+            device.PowerOn();
+
+            var currentConsoleOut = Console.Out;
+            currentConsoleOut.Flush();
+
+            using (var consoleOutput = new ConsoleRedirectionToStringWriter())
+            {
+                IDocument doc1 = new PDFDocument("aaa.pdf");
+                device.Send(doc1, "987654321");
+
+                Assert.IsTrue(consoleOutput.GetOutput().Contains("Sent"));
+            }
+            Assert.AreEqual(currentConsoleOut, Console.Out);
+        }
+
+        [TestMethod]
+        public void Device_Send_DeviceIsOff()
+        {
+            var p = new Printer();
+            var s = new Scanner();
+            var f = new Fax("123456789");
+            var device = new MultiFunctionalDevice(p,s,f);
+            device.PowerOff();
+
+            var currentConsoleOut = Console.Out;
+            currentConsoleOut.Flush();
+            using (var consoleOutput = new ConsoleRedirectionToStringWriter())
+            {
+                IDocument doc1 = new PDFDocument("aaa.pdf");
+                device.Send(doc1, "987654321");
+                Assert.IsFalse(consoleOutput.GetOutput().Contains("Print"));
+            }
+            Assert.AreEqual(currentConsoleOut, Console.Out);
+        }
+
+        [TestMethod]
+        public void Device_ScanAndSend_DeviceIsOn()
+        {
+            var p = new Printer();
+            var s = new Scanner();
+            var f = new Fax("123456789");
+            var device = new MultiFunctionalDevice(p,s,f);
+            device.PowerOn();
+
+            var currentConsoleOut = Console.Out;
+            currentConsoleOut.Flush();
+            using (var consoleOutput = new ConsoleRedirectionToStringWriter())
+            {
+                device.ScanAndSend("987654321");
+                Assert.IsTrue(consoleOutput.GetOutput().Contains("Scan"));
+                Assert.IsTrue(consoleOutput.GetOutput().Contains("Sent"));
+            }
+            Assert.AreEqual(currentConsoleOut, Console.Out);
+        }
+
+        public void Device_ScanAndSend_DeviceIsOff()
+        {
+            var p = new Printer();
+            var s = new Scanner();
+            var f = new Fax("123456789");
+            var device = new MultiFunctionalDevice(p,s,f);
+            device.PowerOff();
+
+            var currentConsoleOut = Console.Out;
+            currentConsoleOut.Flush();
+            using (var consoleOutput = new ConsoleRedirectionToStringWriter())
+            {
+                device.ScanAndSend("987654321");
+                Assert.IsFalse(consoleOutput.GetOutput().Contains("Scan"));
+                Assert.IsFalse(consoleOutput.GetOutput().Contains("Print"));
+            }
+            Assert.AreEqual(currentConsoleOut, Console.Out);
+        }
+    }
 }
